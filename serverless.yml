@@ -1,0 +1,16 @@
+org: redragno
+app: learnrythm
+
+service: lr-server
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-south-1
