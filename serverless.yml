@@ -11,6 +11,35 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stage: dev
   region: ap-south-1
+  environment:
+    DB_CONNECTION: ${file(./config/config.${self:custom.currentStage}.json):DB_CONNECTION}
+    DB_CONNECTIONS: ${file(./config/config.${self:custom.currentStage}.json):DB_CONNECTIONS}
+    OWNER_NAME: ${file(./config/config.${self:custom.currentStage}.json):OWNER_NAME}
+    JWT_SECRET: ${file(./config/config.${self:custom.currentStage}.json):JWT_SECRET}
+    ACCESS_TOKEN_VALIDITY: ${file(./config/config.${self:custom.currentStage}.json):ACCESS_TOKEN_VALIDITY}
+    REFRESH_TOKEN_VALIDITY: ${file(./config/config.${self:custom.currentStage}.json):REFRESH_TOKEN_VALIDITY}
+    REFRESH_SECRET: ${file(./config/config.${self:custom.currentStage}.json):REFRESH_SECRET}
+    COOKIE_DOMAIN: ${file(./config/config.${self:custom.currentStage}.json):COOKIE_DOMAIN}
+    GLOBAL_ACCESS_KEY_ID: ${file(./config/config.${self:custom.currentStage}.json):GLOBAL_ACCESS_KEY_ID}
+    GLOBAL_SECRET_ACCESS_KEY: ${file(./config/config.${self:custom.currentStage}.json):GLOBAL_SECRET_ACCESS_KEY}
+    GLOBAL_DEFAULT_REGION: ${file(./config/config.${self:custom.currentStage}.json):GLOBAL_DEFAULT_REGION}
+
+
+custom:
+  prune:
+    automatic: true
+    number: 1
+  serverless-offline:
+    httpPort: 4000
+  defaultStage: dev
+  currentStage: ${opt:stage, self:custom.defaultStage}
+  stage: ${self:custom.currentStage}
+
+functions:
+  hello:
+    handler: ./handlers/handler.hello
+    events:
+      - http: "ANY /{proxy+}"    
