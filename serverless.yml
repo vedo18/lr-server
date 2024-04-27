@@ -43,3 +43,8 @@ functions:
     handler: ./handlers/handler.hello
     events:
       - http: "ANY /{proxy+}"    
+
+  auth:
+    handler: ./handlers/auth.handler
+    events:
+      - http: "ANY /auth/{any+}"
