@@ -1,22 +1,26 @@
-const db = require("../utils/db");
-const cors = require("cors");
-const express = require("express");
+import { openDBConnection } from "../utils/db";
+import cors from "cors";
+import express from "express";
 const app = express();
-const serverless = require("serverless-http");
-const catchError = require("../utils/error/catchError");
+import serverless from "serverless-http";
+import catchError from "../utils/error/catchError";
 
 app.use(cors());
 app.use(cookieParser());
 app.use(useragent.express());
 
-await db.openDBConnection();
+await openDBConnection();
 
-module.exports.registerUser = async () => {
+export async function registerUser(req, res) {
   logger.info("Registering user handler");
-};
+  const body = JSON.parse(req.body);
+  const data = await authService.registerUser(body);
+  logger.info(data);
+  return;
+}
 
 app.post("/auth/register", catchError(this.registerUser));
 
-module.exports.handler = serverless(app, {
+export const handler = serverless(app, {
   callbackWaitForEmptyEventLoop: false,
 });
