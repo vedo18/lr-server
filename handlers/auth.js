@@ -12,15 +12,24 @@ app.use(useragent.express());
 
 await openDBConnection();
 
-export async function registerUser(req, res) {
+module.exports.registerUser = async (req, res) => {
   logger.info("Registering user handler");
   const body = JSON.parse(req.body);
   const data = await authService.registerUser(body);
   logger.info(data);
   res.send({ data });
-}
+};
+
+module.exports.login = async (req, res) => {
+  logger.info("Registering user handler");
+  const body = JSON.parse(req.body);
+  const data = await authService.registerUser(body);
+  logger.info(data);
+  res.send({ data });
+};
 
 app.post("/auth/register", catchError(this.registerUser));
+app.post("/auth/login", catchError(this.login));
 
 export const handler = serverless(app, {
   callbackWaitForEmptyEventLoop: false,
