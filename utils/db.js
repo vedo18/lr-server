@@ -2,15 +2,14 @@ const mongoose = require("mongoose");
 const logger = require("./log");
 mongoose.set("strictQuery", true);
 
-logger.info("Connecting Database....");
-
+logger.info("Connecting to Database...");
 module.exports.openDBConnection = async () => {
   if (mongoose.connection.readyState !== 1) {
     try {
       const connection = await mongoose.connect(process.env.DB_CONNECTION, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
       });
+      // mongoose.set('strictQuery', true);
       logger.info("Connected to MongoDB DataBase");
       return connection;
     } catch (err) {
@@ -19,5 +18,12 @@ module.exports.openDBConnection = async () => {
       );
       throw new Error(err);
     }
+  }
+};
+
+module.exports.closeDBConnection = async (db) => {
+  if (db) {
+    await db.disconnect();
+    logger.info("Connection closed");
   }
 };

@@ -8,7 +8,7 @@ const userSchema = new Schema({
   profilePic: { type: "string" },
   phoneNumber: { type: "string", required: true, unique: true },
   phoneOTP: { type: Number },
-  email: { type: "string", unique: true },
+  email: { type: "string", unique: true, required: true },
 
   accountType: {
     type: "string",

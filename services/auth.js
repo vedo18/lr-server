@@ -13,11 +13,38 @@ module.exports.findUser = async (condition, populateData) => {
 };
 
 module.exports.registerUser = async (body) => {
+  console.log("123body", body);
+  if (!body.email || !body.password || !body.phoneNumber || !body.name) {
+    console.log("111111111111111111");
+    throw new AppError(400, "auth", "A_E003");
+  }
+
+  const emailExistCondition = {
+    email: body.email,
+  };
+
+  const phoneNumberExistCondition = {
+    phoneNumber: body.phoneNumber,
+  };
+
+  const emailExist = await this.findUser(emailExistCondition);
+
+  if (emailExist) {
+    throw new AppError(400, "auth", "A_E004");
+  }
+
+  const phoneNumberExist = await this.findUser(phoneNumberExistCondition);
+
+  if (phoneNumberExist) {
+    throw new AppError(400, "auth", "A_E005");
+  }
+
   const payload = {
     name: body.name,
     phoneNumber: body.phoneNumber,
-    accountType: "user",
+    password: body.password,
     email: body.email,
+    accountType: "user",
   };
 
   const record = await this.createUser(payload);
@@ -39,5 +66,18 @@ module.exports.login = async (body) => {
   if (!record) {
     throw new AppError(400, "auth", "A_E002");
   }
-  return record;
+
+  const accessToken = await tokenService.signToken(record._id, "access");
+  const refreshToken = await tokenService.signToken(record._id, "refresh");
+
+  const userObject = {
+    accessToken,
+    refreshToken,
+    id: record._id,
+    name: record.name,
+    email: record.email,
+    phoneNumber: record.phoneNumber,
+  };
+
+  return userObject;
 };
