@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const userModel = require("../models/user.model");
 const AppError = require("../utils/error/appError");
 
@@ -39,19 +40,22 @@ module.exports.registerUser = async (body) => {
     throw new AppError(400, "auth", "A_E005");
   }
 
+  const password = bcrypt.hashSync(body.password);
+
   const payload = {
     name: body.name,
     phoneNumber: body.phoneNumber,
-    password: body.password,
+    password,
     email: body.email,
     accountType: "user",
   };
 
   const record = await this.createUser(payload);
+  record.password = undefined;
   return record;
 };
 
-module.exports.login = async (body) => {
+module.exports.loginUser = async (body) => {
   if (!body.email || !body.password) {
     throw new AppError(400, "auth", "A_E001");
   }

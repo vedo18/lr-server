@@ -30,7 +30,7 @@ module.exports.registerUser = async (req, res) => {
 module.exports.login = async (req, res) => {
   logger.info("Registering user handler");
   const body = JSON.parse(req.body);
-  const data = await authService.registerUser(body);
+  const data = await authService.loginUser(body);
   logger.info(data);
   return responser.send(200, "auth", "A_S001", req, res, data);
 };

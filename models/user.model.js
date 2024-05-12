@@ -9,6 +9,7 @@ const userSchema = new Schema({
   phoneNumber: { type: "string", required: true, unique: true },
   phoneOTP: { type: Number },
   email: { type: "string", unique: true, required: true },
+  password: { type: "string", required: true },
 
   accountType: {
     type: "string",
