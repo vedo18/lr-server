@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const userModel = require("../models/user.model");
 const AppError = require("../utils/error/appError");
+const tokenService = require("../middleware/token");
 
 module.exports.createUser = async (data) => {
   const record = await userModel.create(data);
@@ -62,25 +63,29 @@ module.exports.loginUser = async (body) => {
 
   const condition = {
     email: body.email,
-    password: body.password,
     accountType: "user",
   };
 
-  const record = await this.findUser(condition);
-  if (!record) {
+  const user = await this.findUser(condition);
+  console.log("user: " + user);
+  if (!user) {
     throw new AppError(400, "auth", "A_E002");
   }
 
-  const accessToken = await tokenService.signToken(record._id, "access");
-  const refreshToken = await tokenService.signToken(record._id, "refresh");
+  if (!(await bcrypt.compare(body.password, user.password))) {
+    throw new AppError(401, "auth", "A_E006");
+  }
+
+  const accessToken = await tokenService.signToken(user._id, "access");
+  const refreshToken = await tokenService.signToken(user._id, "refresh");
 
   const userObject = {
     accessToken,
     refreshToken,
-    id: record._id,
-    name: record.name,
-    email: record.email,
-    phoneNumber: record.phoneNumber,
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
   };
 
   return userObject;

@@ -32,7 +32,7 @@ module.exports.login = async (req, res) => {
   const body = JSON.parse(req.body);
   const data = await authService.loginUser(body);
   logger.info(data);
-  return responser.send(200, "auth", "A_S001", req, res, data);
+  return responser.send(200, "auth", "A_S002", req, res, data);
 };
 
 app.post("/auth/register", catchError(this.registerUser));

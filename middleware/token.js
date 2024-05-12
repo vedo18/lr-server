@@ -18,7 +18,7 @@ module.exports.signToken = async (id, type) => {
       throw new Error("Invalid Access Token Type");
   }
 
-  return jwt.signToken({ id }, secret, {
+  return jwt.sign({ id }, secret, {
     expiresIn: tokenValidity,
     issuer: "LearnRhythm",
   });
