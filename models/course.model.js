@@ -9,8 +9,17 @@ const courseSchema = new Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   discountPrice: { type: Number },
+  category: { type: String, required: true },
+  level: {
+    type: String,
+    required: true,
+    enum: ["Easy", "Intermediate", "Difficult"],
+  },
   seller: { type: Schema.Types.ObjectId, ref: "user" },
   buyers: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  averageRating: { type: Number },
+  totalRating: { type: Number },
+  rating: { type: Number },
 });
 
 module.exports = mongoose.model("course", courseSchema);
