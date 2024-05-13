@@ -22,4 +22,7 @@ const courseSchema = new Schema({
   rating: { type: Number },
 });
 
+courseSchema.paginate();
+courseSchema.aggregatePaginate();
+
 module.exports = mongoose.model("course", courseSchema);
