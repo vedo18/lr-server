@@ -28,7 +28,7 @@ module.exports.registerUser = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
-  logger.info("Registering user handler");
+  logger.info("login user handler");
   const body = JSON.parse(req.body);
   const data = await authService.loginUser(body);
   logger.info(data);

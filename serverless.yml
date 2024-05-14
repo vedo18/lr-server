@@ -48,3 +48,8 @@ functions:
     handler: ./handlers/auth.handler
     events:
       - http: "ANY /auth/{any+}"
+
+  course:
+    handler: ./handlers/course.handler
+    events:
+      - http: "ANY /course/{any+}"      
